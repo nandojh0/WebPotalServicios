@@ -1,0 +1,6 @@
+projectKey=IVR_KSF_WSKonectaSurveys
+serverUrl=http://172.20.73.49:9000
+serverVersion=8.9.6.50800
+dashboardUrl=http://172.20.73.49:9000/dashboard?id=IVR_KSF_WSKonectaSurveys
+ceTaskId=AYpwThDKZKcUlftcfuK6
+ceTaskUrl=http://172.20.73.49:9000/api/ce/task?id=AYpwThDKZKcUlftcfuK6
