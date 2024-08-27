@@ -5,7 +5,7 @@
 package com.SolucionesNandoTech.WebPortalServicios.service;
 
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
-import com.SolucionesNandoTech.WebPortalServicios.model.UsuarioDto;
+import com.SolucionesNandoTech.WebPortalServicios.model.dto.UsuarioDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -16,10 +16,9 @@ public interface UsuarioService extends UserDetailsService {
 
     public Usuario registerNewUser(UsuarioDto registroDTO);
 
-    public Usuario authenticateUser(String email, String password);
+     public Usuario authenticateUser(String email);
     
     public boolean isEmailTaken(String email);
     
-    public String getCurrentUserRoles();
-
+   
 }

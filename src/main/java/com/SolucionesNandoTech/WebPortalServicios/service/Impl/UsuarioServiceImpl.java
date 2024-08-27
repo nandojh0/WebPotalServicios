@@ -8,7 +8,7 @@ package com.SolucionesNandoTech.WebPortalServicios.service.Impl;
 import com.SolucionesNandoTech.WebPortalServicios.model.ERole;
 import com.SolucionesNandoTech.WebPortalServicios.model.Role;
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
-import com.SolucionesNandoTech.WebPortalServicios.model.UsuarioDto;
+import com.SolucionesNandoTech.WebPortalServicios.model.dto.UsuarioDto;
 import com.SolucionesNandoTech.WebPortalServicios.repository.UsuarioRepository;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import java.util.Collection;
@@ -21,13 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static org.atmosphere.annotation.AnnotationUtil.logger;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 /**
@@ -42,36 +37,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Override
-    public Usuario authenticateUser(String email, String password) {
-        // Crear un objeto AuthenticationToken con las credenciales del usuario
-        try {
-            Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-
-            // Autenticar el usuario utilizando el AuthenticationManager
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-            // Establecer la autenticación en el SecurityContextHolder
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-//           SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_THREADLOCAL);
-
-            // Extraer el rol del usuario
-            String role = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .findFirst()
-                    .orElse("No role found");
-
-            logger.info("Authenticated user role: {}", role); // Registrar el rol del usuario
-
-            return usuarioRepository.findByEmail(email);
-        } catch (AuthenticationException e) {
-            throw new RuntimeException("Authentication failed", e);
-        }
-    }
 
     @Override
     public Usuario registerNewUser(UsuarioDto usuarioDto) {
@@ -100,7 +65,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usuario.setPuntuacion(0.0);
                 usuario.setEspecialidad(usuarioDto.getEspecialidad());
             }
-
             
             return usuarioRepository.save(usuario);
         } else {
@@ -111,7 +75,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         if (isEmailTaken(email)) {
             // Busca el usuario en la base de datos utilizando el nombre de usuario proporcionado
             Usuario usuario = usuarioRepository.findByEmail(email);
@@ -135,9 +98,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
-//        return roles.stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-//                .collect(Collectors.toList());
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())) // Sin prefijo ROLE_
                 .collect(Collectors.toList());
@@ -148,11 +108,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.existsByEmail(email);
     }
 
-    public String getCurrentUserRoles() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            return authentication.getAuthorities().toString();
-        }
-        return "No roles found";
+    @Override
+    public Usuario authenticateUser(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 }

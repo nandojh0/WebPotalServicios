@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.SolucionesNandoTech.WebPortalServicios.model;
+package com.SolucionesNandoTech.WebPortalServicios.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

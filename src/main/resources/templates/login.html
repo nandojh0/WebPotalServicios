@@ -11,12 +11,12 @@
     <div>
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
     </div>
-    <form id="login-form" action="/currentUser" th:action="@{/currentUser}" method="POST">
+    <form id="login-form" action="/login" th:action="@{/login}" method="POST">
                 <!-- Incluye el token CSRF en el formulario -->
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
          <!--<input type="hidden" id="csrf-token" name="_csrf" th:value="${_csrf.token}">-->
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <input type="email" id="username" name="username" required><br><br>
 
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" required><br><br>

@@ -18,7 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import java.io.IOException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
@@ -26,20 +28,23 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElse("USER"); // Valor por defecto si no se encuentra ningún rol
+                .orElse("user no definido");
          HttpSession session = request.getSession();
         // Guardar información del usuario en la sesión
         session.setAttribute("username", authentication.getName());
         session.setAttribute("authorities", authentication.getAuthorities());
         switch (role) {
             case "ADMIN":
-                response.sendRedirect("/admin-home");
+                response.sendRedirect("WebPortalServicios/admin-home");
                 break;
             case "TECHNICIAN":
-                response.sendRedirect("/technician-home");
+                response.sendRedirect("WebPortalServicios/technician-home");
+                break;
+                case "USER":
+                response.sendRedirect("user/home");;
                 break;
             default:
-                response.sendRedirect("/home");
+                response.sendRedirect("login");
                 break;
         }
     }

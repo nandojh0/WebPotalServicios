@@ -18,5 +18,7 @@ public interface ServicioService {
     public Servicio guardarServicio(Servicio servicio);
 
     public Servicio obtenerServicio(Long id);
+    
+    public void eliminarServicio(Long id);
 
 }

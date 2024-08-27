@@ -38,5 +38,10 @@ public class ServicioServiceImpl implements ServicioService {
     public Servicio obtenerServicio(Long id) {
         return servicioRepository.findById(id).orElse(null);
     }
+    
+    @Override
+    public void eliminarServicio(Long id) {
+        servicioRepository.deleteById(id);
+    }
 
 }

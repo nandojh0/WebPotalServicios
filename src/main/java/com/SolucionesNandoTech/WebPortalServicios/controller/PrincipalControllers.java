@@ -8,7 +8,7 @@ package com.SolucionesNandoTech.WebPortalServicios.controller;
 import com.SolucionesNandoTech.WebPortalServicios.model.AuthenticationRequest;
 import com.SolucionesNandoTech.WebPortalServicios.model.Response;
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
-import com.SolucionesNandoTech.WebPortalServicios.model.UsuarioDto;
+import com.SolucionesNandoTech.WebPortalServicios.model.dto.UsuarioDto;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import com.SolucionesNandoTech.WebPortalServicios.utils.DocumentManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,34 +50,34 @@ public class PrincipalControllers {
         }
     }
 
-    @PostMapping("/currentUser")
-    public String login(HttpServletRequest requestHttp, AuthenticationRequest request, RedirectAttributes redirectAttributes, Model model) {
-        try {
-            Usuario usuarioAuth = usuarioService.authenticateUser(request.getEmail(), request.getPassword());
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.isAuthenticated()) {
-                String role = auth.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .findFirst()
-                        .orElse("No role found");
-                System.out.println("El usuario está autenticado con roles: " + auth.getAuthorities());
-                String redirectUrl = getRedirectUrlBasedOnRole(role);
-                model.addAttribute("email", auth.getName());
-                model.addAttribute("username", usuarioAuth.getNombre());
-                model.addAttribute("id", usuarioAuth.getId());
-                model.addAttribute("authorities", role);
-                return redirectUrl;
-            } else {
-                System.out.println("El usuario no está autenticado");
-                 redirectAttributes.addFlashAttribute("error", "El usuario no está autenticado");
-                return "redirect:/login";
-            }
-        } catch (RuntimeException e) {
-            System.out.println("El usuario no está autenticado");
-            redirectAttributes.addFlashAttribute("error", "El usuario no está autenticado");
-            return "redirect:/login";
-        }
-    }
+//    @PostMapping("/currentUser")
+//    public String login(HttpServletRequest requestHttp, AuthenticationRequest request, RedirectAttributes redirectAttributes, Model model) {
+//        try {
+//            Usuario usuarioAuth = usuarioService.authenticateUser(request.getEmail(), request.getPassword());
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            if (auth != null && auth.isAuthenticated()) {
+//                String role = auth.getAuthorities().stream()
+//                        .map(GrantedAuthority::getAuthority)
+//                        .findFirst()
+//                        .orElse("No role found");
+//                System.out.println("El usuario está autenticado con roles: " + auth.getAuthorities());
+//                String redirectUrl = getRedirectUrlBasedOnRole(role);
+//                model.addAttribute("email", auth.getName());
+//                model.addAttribute("username", usuarioAuth.getNombre());
+//                model.addAttribute("id", usuarioAuth.getId());
+//                model.addAttribute("authorities", role);
+//                return redirectUrl;
+//            } else {
+//                System.out.println("El usuario no está autenticado");
+//                 redirectAttributes.addFlashAttribute("error", "El usuario no está autenticado");
+//                return "redirect:/login";
+//            }
+//        } catch (RuntimeException e) {
+//            System.out.println("El usuario no está autenticado");
+//            redirectAttributes.addFlashAttribute("error", "El usuario no está autenticado");
+//            return "redirect:/login";
+//        }
+//    }
 
     @GetMapping("/home")
     public String home(HttpServletRequest request, Authentication authentication, Model model) {
@@ -91,15 +91,15 @@ public class PrincipalControllers {
         return "user/home";
     }
 
-    private String getRedirectUrlBasedOnRole(String role) {
-        switch (role) {
-            case "ADMIN":
-                return "/admin-home";
-            case "TECHNICIAN":
-                return "/technician-home";
-            default:
-                return "/user/home"; // va ha home.index
-        }
-
-    }
+//    private String getRedirectUrlBasedOnRole(String role) {
+//        switch (role) {
+//            case "ADMIN":
+//                return "/admin-home";
+//            case "TECHNICIAN":
+//                return "/technician-home";
+//            default:
+//                return "/user/home"; // va ha home.index
+//        }
+//
+//    }
 }
