@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Información del Usuario</title>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/user.js"></script>
+</head>
+<body>
+    <div>Bienvenido usuario: <span th:text="${email}"></span></div>
+
+    <div id="infoContainer" class="container">
+        <h2>Tu Información</h2>
+        <p>Nombre de Usuario: <span th:text="${username}"></span></p>
+        <p>ID: <span th:text="${id}"></span></p>
+        <p th:if="${authorities}">Rol autenticado: <span th:text="${authorities}"></span></p>
+        <button type="button" onclick="showForm()">Editar Información</button>
+    </div>
+
+    <div id="formContainer" class="container">
+        <h2>Editar Información</h2>
+        <form action="/submit" method="post">
+            <input type="hidden" th:value="${id}" name="id"/>
+
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" name="username" th:value="${username}"/><br/>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${email}"/><br/>
+
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" onclick="hideForm()">Cancelar</button>
+        </form>
+    </div>
+</body>
+</html>

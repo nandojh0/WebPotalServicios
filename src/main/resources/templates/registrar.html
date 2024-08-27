@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="./css/register.css">
+    <style>
+        .oculto {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Registro de Usuario</h1>
+    <form id="registro-form" th:action="@{/register}" method="post">
+       <input type="hidden" id="csrf-token" name="_csrf" th:value="${_csrf.token}">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required><br><br>
+
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" required><br><br>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="tipo-usuario">Tipo de Usuario:</label>
+        <select id="tipo-usuario" name="tipo-usuario" required>
+            <option value="cliente">Cliente</option>
+            <option value="tecnico">Técnico</option>
+        </select><br><br>
+
+        <div id="campos-tecnico" class="oculto">
+            <label for="especialidad">Especialidad:</label>
+            <input type="text" id="especialidad" name="especialidad"><br><br>
+        </div>
+
+        <input type="submit" value="Registrar">
+    </form>
+
+    <script src="./js/register.js"></script>
+</body>
+</html>
+
