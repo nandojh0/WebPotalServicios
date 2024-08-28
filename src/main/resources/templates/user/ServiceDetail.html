@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Detalles del Servicio</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1 th:text="'Detalles de ' + ${servicio.nombre}"></h1>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${servicio.nombre}"></h5>
-                <p class="card-text" th:text="${servicio.descripcion}"></p>
-                <p class="card-text"><strong>Costo:</strong> <span th:text="${servicio.costo} + ' COP'"></span></p>
-                <p class="card-text"><strong>Duración Estimada:</strong> <span th:text="${servicio.duracionEstimada} + ' min'"></span></p>
-                <p class="card-text"><strong>Especialidad del Técnico:</strong> <span th:text="${servicio.creador.especialidad}"></span></p>
-                <a th:href="@{/user/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-warning">Editar</a>
+    <head>
+        <meta charset="UTF-8">
+        <title>Detalles del Servicio</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1 th:text="'Detalles de ' + ${servicio.nombre}"></h1>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${servicio.nombre}"></h5>
+                    <p class="card-text" th:text="${servicio.descripcion}"></p>
+                    <p class="card-text"><strong>Costo:</strong> <span th:text="${servicio.costo} + ' COP'"></span></p>
+                    <p class="card-text"><strong>Duración Estimada:</strong> <span th:text="${servicio.duracionEstimada} + ' min'"></span></p>
+                    <!--<a th:href="@{/user/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-warning">Editar</a>-->
+                                                <form  th:action="@{/user/servicios/editar}" method="post">
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <input type="hidden" name="id" th:value="${servicio.id}"/>
+                                <button type="submit" class="btn btn-warning">Editar</button>
+                            </form>
+                     <a th:href="@{/user/home}" class="btn btn-primary">Volver a la lista de servicios</a>
+                </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

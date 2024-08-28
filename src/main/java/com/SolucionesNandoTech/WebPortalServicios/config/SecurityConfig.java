@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +30,7 @@ public class SecurityConfig {
 
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
-    
+
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
@@ -60,7 +61,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                 // Configura el formulario de login
                 .loginPage("/login")
-                .successHandler(customAuthenticationSuccessHandler)  // Usar el handler personalizado
+                .successHandler(customAuthenticationSuccessHandler) // Usar el handler personalizado
                 .failureUrl("/login?error=true")
                 )
                 .exceptionHandling(exceptions -> exceptions
@@ -75,7 +76,9 @@ public class SecurityConfig {
                 })
                 .logout(logout -> logout
                 .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/")
+                .permitAll()
                 )
                 .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.sameOrigin())

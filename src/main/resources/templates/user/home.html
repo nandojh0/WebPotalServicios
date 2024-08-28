@@ -6,10 +6,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--        <link rel="stylesheet" href="./css/styles.css">-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <!--<script src="./js/user.js"></script>-->
+        <script src="../js/user.js"></script>
     </head>
     <body>
+        <!--<input type="text" id="csrfToken" value="${_csrf.token}" />-->
+        <!--                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />-->
         <!--        <div>Bienvenido usuario: <span th:text="${email}"></span></div>-->
+
+
+
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
+                    sesión</a></li>
+        </ul>
         <h1>Bienvenido, <span th:text="${#authentication.name}">Usuario</span></h1>
         <div id="infoContainer" class="container">
             <h2>Tu Información</h2>
@@ -18,15 +27,13 @@
             <p th:if="${authorities}">Rol autenticado: <span th:text="${authorities}"></span></p>
 
             <p>Esta es la página de inicio para los usuarios.</p>
-            <a th:href="@{/logout}">Cerrar Sesión</a>
-            <button type="button" onclick="showForm()">Editar Información</button>
         </div>
         <div class="container">
             <h1>Mis Servicios</h1>
             <a class="btn btn-success" th:href="@{/user/servicios/crear}">Crear Nuevo Servicio</a>
-<!--            <form th:action="@{/user/servicios/crear}" method="GET">
-                <button type="submit">Ir a Crear Servicio</button>
-            </form>-->
+            <!--            <form th:action="@{/user/servicios/crear}" method="GET">
+                            <button type="submit">Ir a Crear Servicio</button>
+                        </form>-->
 
             <table class="table table-striped">
                 <thead>
@@ -45,9 +52,23 @@
                         <td th:text="${servicio.costo}"></td>
                         <td th:text="${servicio.duracionEstimada} + ' min'"></td>
                         <td>
-                            <a th:href="@{/user/servicios/detalle/{id}(id=${servicio.id})}" class="btn btn-primary">Detalles</a>
-                            <a th:href="@{/user/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-warning">Editar</a>
-                            <a th:href="@{/user/servicios/eliminar/{id}(id=${servicio.id})}" class="btn btn-danger">Eliminar</a>
+                            <!-- con js-->
+                            <!--<button class="btn btn-primary" th:onclick="'verDetalles(' + ${servicio.id} + ')'">Detalles</button>--> 
+                            <form  th:action="@{/user/servicios/detalle}" method="post">
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <input type="hidden" name="id" th:value="${servicio.id}"/>
+                                <button type="submit" class="btn btn-primary">Detalles</button>
+                            </form>
+                            <!--<a th:href="@{/user/servicios/detalle/{id}(id=${servicio.id})}" class="btn btn-primary">Detalles</a>-->
+                            <!--<a th:href="@{/user/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-warning">Editar</a>-->
+                            <!--                            <button class="btn btn-warning" th:onclick="'editarServicio(' + ${servicio.id} + ')'">Editar2</button>-->
+                            <form  th:action="@{/user/servicios/editar}" method="post">
+                                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+                                <input type="hidden" name="id" th:value="${servicio.id}"/>
+                                <button type="submit" class="btn btn-warning">Editar</button>
+                            </form>
+                            <button class="btn btn-danger" th:onclick="'eliminarServicio(' + ${servicio.id} + ')'">Eliminar</button>
+                            <!--<a th:href="@{/user/servicios/eliminar/{id}(id=${servicio.id})}" class="btn btn-danger">Eliminar</a>-->
                         </td>
                     </tr>
                 </tbody>

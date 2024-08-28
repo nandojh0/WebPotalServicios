@@ -6,6 +6,7 @@ package com.SolucionesNandoTech.WebPortalServicios.controller;
 
 import com.SolucionesNandoTech.WebPortalServicios.model.Servicio;
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
+import com.SolucionesNandoTech.WebPortalServicios.model.dto.ServicioDto;
 import com.SolucionesNandoTech.WebPortalServicios.service.ServicioService;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import java.util.List;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -45,8 +48,15 @@ public class ServicioController {
         return "servicios/lista";
     }
     
-    @GetMapping("/editar/{id}")
-    public String mostrarFormularioDeEditarServicio(@PathVariable Long id, Model model) {
+//    @PostMapping("/editar")
+//    public String mostrarFormularioDeEditarServicio(@RequestBody ServicioDto servicioDto, Model model) {
+//        Servicio servicio = servicioService.obtenerServicio(servicioDto.getId());
+//        model.addAttribute("servicio", servicio);
+//        return "/user/ServiceForm";
+//    }
+    
+    @PostMapping("/editar")
+    public String mostrarFormularioDeEditarServicio(@RequestParam("id") Long id, Model model) {
         Servicio servicio = servicioService.obtenerServicio(id);
         model.addAttribute("servicio", servicio);
         return "/user/ServiceForm";
@@ -74,9 +84,26 @@ public class ServicioController {
         return "redirect:/user/home";
     }
 
-    @GetMapping("/detalle/{id}")
-    public String mostrarDetalleDeServicio(@PathVariable Long id, Model model) {
+    //con js
+//    @PostMapping("/detalle")
+//    public String mostrarDetalleDeServicio(@RequestBody ServicioDto servicioDto, Model model) {
+//        Servicio servicio = servicioService.obtenerServicio(servicioDto.getId());
+//        model.addAttribute("servicio", servicio);
+//        return "/user/ServiceDetail";
+//    }
+    @PostMapping("/detalle")
+    public String postServicioDetalle(@RequestParam("id") Long id, Model model) {
+        // Obtén el detalle del servicio usando el ID proporcionado
         Servicio servicio = servicioService.obtenerServicio(id);
+
+        // Verifica si el servicio existe
+        if (servicio == null) {
+            // Maneja el caso cuando el servicio no se encuentra (opcional)
+            model.addAttribute("error", "Servicio no encontrado");
+            return "error";
+        }
+
+        // Agrega el detalle del servicio al modelo
         model.addAttribute("servicio", servicio);
         return "/user/ServiceDetail";
     }
