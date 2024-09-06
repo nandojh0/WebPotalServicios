@@ -4,12 +4,15 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.controller;
 
+import com.SolucionesNandoTech.WebPortalServicios.model.ERole;
+import com.SolucionesNandoTech.WebPortalServicios.model.Especialidad;
 import com.SolucionesNandoTech.WebPortalServicios.model.Servicio;
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
-import com.SolucionesNandoTech.WebPortalServicios.model.dto.ServicioDto;
+import com.SolucionesNandoTech.WebPortalServicios.service.ReservaService;
 import com.SolucionesNandoTech.WebPortalServicios.service.ServicioService;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,9 +21,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -28,40 +31,41 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/user/servicios")
-public class ServicioController {
+public class UsuarioServicioController {
 
     private final ServicioService servicioService;
+
     @Autowired
     private UsuarioService usuarioService;
 
-    public ServicioController(ServicioService servicioService) {
+    @Autowired
+    private ReservaService reservaService;
+
+    public UsuarioServicioController(ServicioService servicioService) {
         this.servicioService = servicioService;
     }
 
     @GetMapping("/listar")
     public String listarServicios(Authentication authentication, Model model) {
-        String prueba = "prueba";
         String emain = (String) authentication.getPrincipal();
         Usuario creador = usuarioService.authenticateUser(emain);
         List<Servicio> servicios = servicioService.obtenerServiciosPorCreador(creador.getId());
         model.addAttribute("servicios", servicios);
         return "servicios/lista";
     }
-    
+
 //    @PostMapping("/editar")
 //    public String mostrarFormularioDeEditarServicio(@RequestBody ServicioDto servicioDto, Model model) {
 //        Servicio servicio = servicioService.obtenerServicio(servicioDto.getId());
 //        model.addAttribute("servicio", servicio);
 //        return "/user/ServiceForm";
 //    }
-    
     @PostMapping("/editar")
     public String mostrarFormularioDeEditarServicio(@RequestParam("id") Long id, Model model) {
         Servicio servicio = servicioService.obtenerServicio(id);
         model.addAttribute("servicio", servicio);
         return "/user/ServiceForm";
     }
-
 
     @GetMapping("/crear")
     public String mostrarFormularioCrearServicio(Model model) {
@@ -70,15 +74,20 @@ public class ServicioController {
     }
 
     @PostMapping("/guardar")
-    public String crearServicio(@ModelAttribute Servicio servicio, Authentication authentication) {
-        String emain = (String) authentication.getPrincipal();
-        Usuario creador = usuarioService.authenticateUser(emain);
+    public String crearServicio(@ModelAttribute Servicio servicio, Authentication authentication, RedirectAttributes redirectAttributes) {
+// Verificar que el principal es una instancia de UsuarioDetails
+        if (authentication.getPrincipal() instanceof Usuario) {
+            Usuario creador = (Usuario) authentication.getPrincipal();
         servicio.setCreador(creador);
         servicioService.guardarServicio(servicio);
         return "redirect:/user/home";
+        } else {
+            redirectAttributes.addFlashAttribute("No autenticado");
+            return "redirect:/login";
+        }
     }
-    
-     @GetMapping("/eliminar/{id}")
+
+    @GetMapping("/eliminar/{id}")
     public String eliminarServicio(@PathVariable Long id) {
         servicioService.eliminarServicio(id);
         return "redirect:/user/home";
@@ -95,18 +104,38 @@ public class ServicioController {
     public String postServicioDetalle(@RequestParam("id") Long id, Model model) {
         // Obtén el detalle del servicio usando el ID proporcionado
         Servicio servicio = servicioService.obtenerServicio(id);
+        // Asegurar que la reserva sea cargada
+        List<Usuario> tecnicos = usuarioService.findByRolesNombreAndEnabled(ERole.TECHNICIAN, true);
+        // Crear listas únicas para el filtrado
+        List<String> nombresUnicos = tecnicos.stream()
+                .map(Usuario::getNombre)
+                .distinct()
+                .collect(Collectors.toList());
 
-        // Verifica si el servicio existe
+        List<String> especialidadesUnicas = tecnicos.stream()
+                .flatMap(t -> t.getEspecialidades().stream())
+                .map(Especialidad::getNombre)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<String> puntuacionesUnicas = tecnicos.stream()
+                .map(t -> String.valueOf(t.getPuntuacion()))
+                .distinct()
+                .collect(Collectors.toList());
+// Verifica si el servicio existe
         if (servicio == null) {
-            // Maneja el caso cuando el servicio no se encuentra (opcional)
+            // Maneja el caso cuando el servicio no se encuentra
             model.addAttribute("error", "Servicio no encontrado");
             return "error";
         }
 
         // Agrega el detalle del servicio al modelo
         model.addAttribute("servicio", servicio);
-        return "/user/ServiceDetail";
+        model.addAttribute("tecnicos", tecnicos);
+        model.addAttribute("nombresUnicos", nombresUnicos);
+        model.addAttribute("especialidadesUnicas", especialidadesUnicas);
+        model.addAttribute("puntuacionesUnicas", puntuacionesUnicas);
+        return "user/ServiceDetail";
     }
-    
-    
+
 }

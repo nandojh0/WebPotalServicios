@@ -8,6 +8,7 @@ import com.SolucionesNandoTech.WebPortalServicios.model.Servicio;
 import com.SolucionesNandoTech.WebPortalServicios.repository.ServicioRepository;
 import com.SolucionesNandoTech.WebPortalServicios.service.ServicioService;
 import java.util.List;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,7 +37,11 @@ public class ServicioServiceImpl implements ServicioService {
 
     @Override
     public Servicio obtenerServicio(Long id) {
-        return servicioRepository.findById(id).orElse(null);
+        Servicio servicio = servicioRepository.findById(id).orElse(null);
+        if (servicio.getReserva() != null) {
+            Hibernate.initialize(servicio.getReserva());
+        }
+        return servicio;
     }
     
     @Override

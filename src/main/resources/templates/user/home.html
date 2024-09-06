@@ -29,12 +29,11 @@
             <p>Esta es la página de inicio para los usuarios.</p>
         </div>
         <div class="container">
+            <a th:href="@{/user/reservas/lista}" class="btn btn-primary">lista de reservas</a>
+        </div>
+        <div class="container">
             <h1>Mis Servicios</h1>
             <a class="btn btn-success" th:href="@{/user/servicios/crear}">Crear Nuevo Servicio</a>
-            <!--            <form th:action="@{/user/servicios/crear}" method="GET">
-                            <button type="submit">Ir a Crear Servicio</button>
-                        </form>-->
-
             <table class="table table-striped">
                 <thead>
                     <tr>

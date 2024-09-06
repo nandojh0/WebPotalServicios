@@ -8,6 +8,7 @@ package com.SolucionesNandoTech.WebPortalServicios.config;
  *
  * @author nando
  */
+import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,14 +32,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // Implementa los métodos necesarios, como authenticate y supports
     @Override
     public Authentication authenticate(Authentication authentication) {
-        String username = authentication.getName();
+        String emain = authentication.getName();
         String password = (String) authentication.getCredentials();
 
         UserDetails user;
 
         try {
             // Carga los detalles del usuario usando el UsuarioService
-            user = usuarioService.loadUserByUsername(username);
+            user = usuarioService.loadUserByUsername(emain);
         } catch (UsernameNotFoundException e) {
             // Si el usuario no se encuentra, lanzar una excepción personalizada
             throw new BadCredentialsException("Usuario no encontrado");
@@ -46,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         
         // Verifica la contraseña
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
         } else {
             throw new BadCredentialsException("Contraseña incorrecta");
         }

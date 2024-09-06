@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
     <link rel="stylesheet" href="./css/register.css">
-    <style>
-        .oculto {
-            display: none;
-        }
-    </style>
 </head>
+
 <body>
     <h1>Registro de Usuario</h1>
     <form id="registro-form" th:action="@{/register}" method="post">
-       <input type="hidden" id="csrf-token" name="_csrf" th:value="${_csrf.token}">
+        <input type="hidden" id="csrf-token" name="_csrf" th:value="${_csrf.token}">
+
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -37,8 +35,18 @@
         </select><br><br>
 
         <div id="campos-tecnico" class="oculto">
-            <label for="especialidad">Especialidad:</label>
-            <input type="text" id="especialidad" name="especialidad"><br><br>
+            <label for="especialidades">Especialidades:</label>
+            <select id="especialidades" name="especialidades" multiple>
+                <!-- Las opciones serán cargadas dinámicamente con Thymeleaf -->
+                <option th:each="especialidad : ${especialidades}" 
+                        th:value="${especialidad.id}" 
+                        th:text="${especialidad.nombre}"></option>
+            </select>
+            <button type="button" id="agregar-especialidad">Agregar</button><br><br>
+                     <div id="especialidades-seleccionadas">
+                <h4>Especialidades seleccionadas:</h4>
+                <ul id="lista-especialidades"></ul>
+            </div>
         </div>
 
         <input type="submit" value="Registrar">
@@ -46,5 +54,5 @@
 
     <script src="./js/register.js"></script>
 </body>
-</html>
 
+</html>

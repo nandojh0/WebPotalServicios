@@ -13,12 +13,18 @@ package com.SolucionesNandoTech.WebPortalServicios.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @Builder
@@ -27,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "usuarios")
-public class Usuario{
+public class Usuario implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +63,61 @@ public class Usuario{
     )
     private Set<Role> roles = new HashSet<>();
     
-    private String especialidad; // Especialidad del técnico
+     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+        name = "usuario_especialidades",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "especialidad_id")
+    )
+    private Set<Especialidad> especialidades = new HashSet<>(); // Múltiples especialidades del técnico
+    
     private double puntuacion; // Puntuación del técnico
+
+     // Implementación de los métodos de UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                    .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Puedes cambiar esto si tienes lógica para cuentas expiradas
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Puedes cambiar esto si tienes lógica para cuentas bloqueadas
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Puedes cambiar esto si tienes lógica para credenciales expiradas
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getUsername() {
+       return nombre;
+    }
+    
+    // Sobreescribir equals y hashCode para comparar por id
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
 

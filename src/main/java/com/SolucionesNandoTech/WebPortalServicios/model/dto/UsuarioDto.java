@@ -33,7 +33,7 @@ public class UsuarioDto {
     @NotBlank
     private String password;
     private Set<String> roles;
-    private String especialidad;
+    private Set<Long> especialidades;
     private Double calificacion;
     
     String regexNombre = "^[A-Za-z������������\\s]+$";

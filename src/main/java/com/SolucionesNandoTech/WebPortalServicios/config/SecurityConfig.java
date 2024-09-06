@@ -38,7 +38,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -83,9 +83,9 @@ public class SecurityConfig {
                 .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 .contentSecurityPolicy(csp -> csp
-                .policyDirectives("default-src 'self'; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com; script-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com;"))
+                .policyDirectives("default-src 'self'; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com; script-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdn.jsdelivr.net;"))
                 );
-
+   
         return http.build();
     }
 

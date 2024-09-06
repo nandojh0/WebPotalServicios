@@ -5,7 +5,9 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.repository;
 
+import com.SolucionesNandoTech.WebPortalServicios.model.ERole;
 import com.SolucionesNandoTech.WebPortalServicios.model.Role;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,5 +15,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author nando
  */
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    
+    Optional<Role> findByName(ERole name);
 }

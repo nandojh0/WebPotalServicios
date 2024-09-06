@@ -14,15 +14,120 @@
                     <p class="card-text" th:text="${servicio.descripcion}"></p>
                     <p class="card-text"><strong>Costo:</strong> <span th:text="${servicio.costo} + ' COP'"></span></p>
                     <p class="card-text"><strong>Duración Estimada:</strong> <span th:text="${servicio.duracionEstimada} + ' min'"></span></p>
-                    <!--<a th:href="@{/user/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-warning">Editar</a>-->
-                                                <form  th:action="@{/user/servicios/editar}" method="post">
+
+                    <div th:if="${servicio.reserva != null}">
+                        <!-- Si el servicio ya tiene una reserva -->
+                        <h5>Detalles de la Reserva</h5>
+                        <p><strong>Cliente:</strong> <span th:text="${servicio.reserva.cliente.nombre}"></span></p>
+                        <p><strong>Técnico Asignado:</strong> <span th:text="${servicio.reserva.tecnico.nombre}"></span></p>
+                        <p><strong>Fecha de Reserva:</strong> <span th:text="${#dates.format(servicio.reserva.fechaReserva, 'yyyy-MM-dd HH:mm')}"></span></p>
+                        <p><strong>Estado de la Reserva:</strong> <span th:text="${servicio.reserva.estado}"></span></p>
+                        <form  th:action="@{/user/reservas/detalle}" method="post">
                                 <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
-                                <input type="hidden" name="id" th:value="${servicio.id}"/>
-                                <button type="submit" class="btn btn-warning">Editar</button>
+                                <input type="hidden" name="reservaId" th:value="${servicio.reserva.id}"/>
+                                <button type="submit" class="btn btn-info">Ver Detalles de la Reserva</button>
                             </form>
-                     <a th:href="@{/user/home}" class="btn btn-primary">Volver a la lista de servicios</a>
+                        <!--<a th:href="@{/user/reservas/detalles/{id}(id=${servicio.reserva.id})}" class="btn btn-info">Ver Detalles de la Reserva</a>-->
+                    </div>
+                    <div th:if="${servicio.reserva == null}">
+                        <!-- Si el servicio no tiene una reserva, permitir seleccionar técnico -->
+                        <h5>Seleccionar Técnico</h5>
+
+                        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar técnico...">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Nombre
+                                        <select class="form-control form-control-sm" id="filterNombre">
+                                            <option value="">Todos</option>
+                                            <option th:each="nombre : ${nombresUnicos}" th:value="${nombre}" th:text="${nombre}"></option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        Especialidades
+                                        <select class="form-control form-control-sm" id="filterEspecialidades">
+                                            <option value="">Todas</option>
+                                            <option th:each="especialidad : ${especialidadesUnicas}" th:value="${especialidad}" th:text="${especialidad}"></option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        Puntuación
+                                        <select class="form-control form-control-sm" id="filterPuntuacion">
+                                            <option value="">Todas</option>
+                                            <option th:each="puntuacion : ${puntuacionesUnicas}" th:value="${puntuacion}" th:text="${puntuacion}"></option>
+                                        </select>
+                                    </th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tecnicoTableBody">
+                                <tr th:each="tecnico : ${tecnicos}">
+                                    <td th:text="${tecnico.nombre}"></td>
+                                    <td>
+                                        <ul>
+                                            <li th:each="especialidad : ${tecnico.especialidades}" th:text="${especialidad.nombre}"></li>
+                                        </ul>
+                                    </td>
+                                    <td th:text="${tecnico.puntuacion}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm view-details" data-toggle="modal" data-target="#tecnicoModal"
+                                                th:data-nombre="${tecnico.nombre}"
+                                                th:data-especialidades="${#strings.listJoin(tecnico.especialidades.![nombre], ', ')}"
+                                                th:data-puntuacion="${tecnico.puntuacion}"
+                                                th:data-id="${tecnico.id}">
+                                            Ver Detalles
+                                        </button>
+                                        <form th:action="@{/user/reservas/crear}" method="post" style="display:inline;">
+                                            <input type="hidden" name="servicioId" th:value="${servicio.id}"/>
+                                            <input type="hidden" name="tecnicoId" th:value="${tecnico.id}"/>
+                                            <button type="submit" class="btn btn-primary btn-sm">Crear Reservación</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <form th:action="@{/user/servicios/editar}" method="post">
+                        <input type="hidden" name="id" th:value="${servicio.id}"/>
+                        <button type="submit" class="btn btn-warning">Editar</button>
+                    </form>
+                    <a th:href="@{/user/home}" class="btn btn-primary">Volver a la lista de servicios</a>
                 </div>
             </div>
         </div>
+
+        <!-- Modal para Detalles del Técnico -->
+        <div class="modal fade" id="tecnicoModal" tabindex="-1" role="dialog" aria-labelledby="tecnicoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tecnicoModalLabel">Detalles del Técnico</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nombre:</strong> <span id="tecnicoNombre"></span></p>
+                        <p><strong>Especialidades:</strong> <span id="tecnicoEspecialidad"></span></p>
+                        <p><strong>Puntuación:</strong> <span id="tecnicoPuntuacion"></span></p>
+                        <!-- Formulario para crear la reservación desde el modal -->
+                        <form th:action="@{/user/reservas/crear}" method="post">
+                            <input type="hidden" name="servicioId" th:value="${servicio.id}"/>
+                            <input type="hidden" id="modalTecnicoId" name="tecnicoId"/>
+                            <button type="submit" class="btn btn-primary">Crear Reservación</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/WebPortalServicios/js/user.js"></script> <!-- Enlace al archivo user.js -->
     </body>
 </html>

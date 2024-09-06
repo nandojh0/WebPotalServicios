@@ -1,0 +1,6 @@
+0  Hora : 18:51:40  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.
+0  Hora : 18:51:40  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.
+0  Hora : 18:51:46  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.
+0  Hora : 18:51:46  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.
+0  Hora : 18:52:41  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.
+0  Hora : 18:52:47  IP :  0:0:0:0:0:0:0:1    Excepción: jakarta.servlet.ServletException: Unable to handle the Spring Security Exception because the response is already committed.

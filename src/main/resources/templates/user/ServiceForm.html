@@ -7,7 +7,7 @@
     </head>
     <body>
         <div class="container">
-            <h1 th:text="${servicio.id == null ? 'Crear Servicio' : 'Editar Servicio'}"></h1>
+            <h1 th:text="${servicio.id == null ? 'Solicitar Servicio' : 'Editar Servicio'}"></h1>
 
             <form th:action="@{/user/servicios/guardar}" th:object="${servicio}" method="post">
                 <input type="hidden" th:field="*{id}" />

@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -31,13 +32,13 @@ public class Reserva {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Usuario Usuario;
+    private Usuario cliente;
     
     @ManyToOne
     @JoinColumn(name = "tecnico_id", nullable = false)
     private Usuario tecnico;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "servicio_id", nullable = false)
     private Servicio servicio;
 

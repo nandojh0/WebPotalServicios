@@ -4,16 +4,13 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.model;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,26 +20,23 @@ import lombok.NoArgsConstructor;
  *
  * @author nando
  */
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "servicios")
-public class Servicio {
+@Table(name = "especialidades")
+public class Especialidad {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String nombre;
-    private String descripcion;
-    private Double costo;
-    private Integer duracionEstimada; // Duraci�n en minutos
     
-     @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private Usuario creador;
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String nombre;
+    
+    private String descripcion;
 
-    @OneToOne(mappedBy = "servicio", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Reserva reserva;
 }
