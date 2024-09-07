@@ -117,11 +117,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
-//    private Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
-//        return roles.stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName().name())) // Sin prefijo ROLE_
-//                .collect(Collectors.toList());
-//    }
     @Override
     public boolean isEmailTaken(String email) {
         return usuarioRepository.existsByEmail(email);

@@ -11,14 +11,11 @@ import com.SolucionesNandoTech.WebPortalServicios.repository.EspecialidadReposit
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.csrf.CsrfToken;
 
 /**
  *
@@ -58,24 +55,4 @@ public class HomeController {
         return "registrar"; // Página de registro
     }
 
-//    @GetMapping("/home")
-//    public String home(HttpSession session, Model model) {
-//        // Obtener los datos del usuario de la sesión
-//        String username = (String) session.getAttribute("username");
-//        Object authorities = session.getAttribute("authorities");
-//
-//        // Añadir los datos al modelo
-//        model.addAttribute("username", username);
-//        model.addAttribute("authorities", authorities);
-//        return "home"; // Página de inicio para usuarios
-//    }
-    @GetMapping("/admin-home")
-    public String adminHome() {
-        return "admin-home"; // Página de inicio para administradores
-    }
-
-    @GetMapping("/technician-home")
-    public String technicianHome() {
-        return "technician-home"; // Página de inicio para técnicos
-    }
 }

@@ -34,8 +34,4 @@ public class Response<T> {
     public Response() {
     }
 
-    public void sendRedirect(String redirectUrl) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }
