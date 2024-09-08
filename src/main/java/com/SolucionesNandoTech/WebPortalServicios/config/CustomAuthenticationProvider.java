@@ -8,7 +8,7 @@ package com.SolucionesNandoTech.WebPortalServicios.config;
  *
  * @author nando
  */
-import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
+
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

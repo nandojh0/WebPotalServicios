@@ -42,7 +42,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("authorities", authentication.getAuthorities());
         switch (role) {
             case "ADMIN":
-                response.sendRedirect("WebPortalServicios/admin-home");
+                response.sendRedirect(request.getContextPath() + "/admin/home");
                 break;
             case "TECHNICIAN":
                 response.sendRedirect(request.getContextPath() + "/tech/home");
@@ -51,7 +51,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 response.sendRedirect(request.getContextPath() + "/user/home");
                 break;
             default:
-                response.sendRedirect("login");
+                response.sendRedirect(request.getContextPath() + "/login");
                 break;
         }
     }
