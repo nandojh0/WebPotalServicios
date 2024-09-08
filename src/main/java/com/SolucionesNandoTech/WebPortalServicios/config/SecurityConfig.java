@@ -51,8 +51,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/css/**").permitAll();
                     auth.requestMatchers("/js/**").permitAll();
                     auth.requestMatchers("/", "/login", "/registrar").permitAll(); // Index, login, and registrar.
-                    auth.requestMatchers("/register", "/currentUser").permitAll(); // para los endpoint
-                    auth.requestMatchers("/home").hasAuthority("USER");
+                    auth.requestMatchers("/register").permitAll(); // para los endpoint
                     auth.requestMatchers("/user/**").hasAuthority("USER");
                     auth.requestMatchers("/tech/**").hasAuthority("TECHNICIAN");
                     auth.requestMatchers("/admin/**").hasAuthority("ADMIN");
