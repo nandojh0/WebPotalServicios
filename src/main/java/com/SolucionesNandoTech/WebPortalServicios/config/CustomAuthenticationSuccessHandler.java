@@ -9,6 +9,7 @@ package com.SolucionesNandoTech.WebPortalServicios.config;
  *
  * @author nando
  */
+import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +25,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+
+        // Verificar si el usuario está habilitado
+        if (!usuario.isEnabled()) {
+            response.sendRedirect(request.getContextPath() + "/login?error=disabled");
+            return;
+        }
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()

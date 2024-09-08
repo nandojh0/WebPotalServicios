@@ -110,6 +110,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                     .telefono(usuario.getTelefono())
                     .direccion(usuario.getDireccion())
                     .especialidades(usuario.getEspecialidades())
+                    .enabled(usuario.isEnabled())
                     .build();
         } else { // Lanza una excepci�n si no se encuentra el usuario en la base de datos
             throw new UsernameNotFoundException("User not found with username: " + email);

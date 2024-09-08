@@ -33,3 +33,21 @@ input[type="submit"] {
 input[type="submit"]:hover {
     background-color: #45a049;
 }
+.error-message {
+    color: red;
+    position: relative;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #fdd;
+    margin-bottom: 10px;
+}
+.error-message button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+}

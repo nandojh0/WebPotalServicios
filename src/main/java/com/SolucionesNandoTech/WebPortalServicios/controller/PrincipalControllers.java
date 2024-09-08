@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -44,8 +45,11 @@ public class PrincipalControllers {
     }
 
     @GetMapping("/login")
-    public String login() {
-        return "login"; // Página de login
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Credenciales incorrectas");
+        }
+        return "login"; // Nombre de la plantilla Thymeleaf
     }
 
     @GetMapping("/registrar")
@@ -74,7 +78,7 @@ public class PrincipalControllers {
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             response = new Response("020", "Excepcion en el Servicio", e.getMessage());
-            doc.write(1, "/register Excepction:"+e);
+            doc.write(1, "/register Excepction:" + e);
             return ResponseEntity.badRequest().body(response);
         }
     }
