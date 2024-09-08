@@ -12,9 +12,6 @@
         <!--<input type="text" id="csrfToken" value="${_csrf.token}" />-->
         <!--                <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />-->
         <!--        <div>Bienvenido usuario: <span th:text="${email}"></span></div>-->
-
-
-
         <ul class="nav navbar-nav">
             <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar
                     sesión</a></li>

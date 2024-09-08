@@ -9,7 +9,6 @@ package com.SolucionesNandoTech.WebPortalServicios.config;
  *
  * @author nando
  */
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse("user no definido");
-         HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         // Guardar información del usuario en la sesión
         session.setAttribute("username", authentication.getName());
         session.setAttribute("authorities", authentication.getAuthorities());
@@ -38,10 +37,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 response.sendRedirect("WebPortalServicios/admin-home");
                 break;
             case "TECHNICIAN":
-                response.sendRedirect("WebPortalServicios/technician-home");
+                response.sendRedirect(request.getContextPath() + "/tech/home");
                 break;
-                case "USER":
-                response.sendRedirect("user/home");;
+            case "USER":
+                response.sendRedirect(request.getContextPath() + "/user/home");
                 break;
             default:
                 response.sendRedirect("login");

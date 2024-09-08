@@ -4,24 +4,46 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.controller;
 
+import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
  * @author nando
  */
 @Controller
+@RequestMapping("/tech")
 public class TecnicoController {
     
-    @GetMapping("/tech/home")
-    public String login(Authentication authentication, Model model) {
-        if (authentication != null) {
-            model.addAttribute("roles", authentication.getAuthorities().toString());
+    @GetMapping("/home")
+    public String userHome(Authentication authentication,Model model, RedirectAttributes redirectAttributes) {
+        // Obtener el Authentication del SecurityContextHolder
+        // Verificar que el principal es una instancia de UsuarioDetails
+        if (authentication.getPrincipal() instanceof Usuario) {
+            Usuario usuarioDetails = (Usuario) authentication.getPrincipal();
+
+            // Obtener el  roles del UsuarioDetails
+            String role = usuarioDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("USER_NOT_DEFINED");
+            
+
+        model.addAttribute("username",usuarioDetails.getNombre());
+        model.addAttribute("id",usuarioDetails.getId());
+        model.addAttribute("phoneNumber",usuarioDetails.getTelefono());
+        model.addAttribute("authorities", role);
+         } else {
+          redirectAttributes.addFlashAttribute("No autenticado");
+          return "redirect:/login";
         }
-        return "home"; // Devuelve el nombre del archivo sin la extensión .html
+        return "/home"; // Página de inicio del usuario
     }
-    
+
 }
