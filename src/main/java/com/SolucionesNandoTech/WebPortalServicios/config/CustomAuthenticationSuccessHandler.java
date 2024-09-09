@@ -41,18 +41,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("username", authentication.getName());
         session.setAttribute("authorities", authentication.getAuthorities());
         switch (role) {
-            case "ADMIN":
-                response.sendRedirect(request.getContextPath() + "/admin/home");
-                break;
-            case "TECHNICIAN":
-                response.sendRedirect(request.getContextPath() + "/tech/home");
-                break;
-            case "USER":
-                response.sendRedirect(request.getContextPath() + "/user/home");
-                break;
-            default:
-                response.sendRedirect(request.getContextPath() + "/login");
-                break;
+            case "ADMIN" -> response.sendRedirect(request.getContextPath() + "/admin/home");
+            case "TECHNICIAN" -> response.sendRedirect(request.getContextPath() + "/tech/home");
+            case "USER" -> response.sendRedirect(request.getContextPath() + "/user/home");
+            default -> response.sendRedirect(request.getContextPath() + "/login?error="+role);
         }
     }
 }

@@ -35,8 +35,7 @@ public class UsuarioController {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Verificar que el principal es una instancia de UsuarioDetails
-        if (authentication.getPrincipal() instanceof Usuario) {
-            Usuario usuarioDetails = (Usuario) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Usuario usuarioDetails) {
 
             // Obtener el  roles del UsuarioDetails
             String role = usuarioDetails.getAuthorities().stream()
@@ -55,7 +54,7 @@ public class UsuarioController {
           redirectAttributes.addFlashAttribute("No autenticado");
           return "redirect:/login";
         }
-        return "/user/home"; // Página de inicio del usuario
+        return "user/home"; // Página de inicio del usuario
     }
 
 }

@@ -43,7 +43,7 @@ public class TecnicoController {
           redirectAttributes.addFlashAttribute("No autenticado");
           return "redirect:/login";
         }
-        return "/home"; // Página de inicio del usuario
+        return "tech/home"; // Página de inicio del usuario
     }
 
 }

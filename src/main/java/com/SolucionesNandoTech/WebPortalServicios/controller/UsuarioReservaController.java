@@ -124,11 +124,11 @@ public class UsuarioReservaController {
         if (!servicio.getDescripcion().equals(detalles)) {
             servicio.setDescripcion(detalles);
         }
-        
-                    model.addAttribute("reserva", reserva);
-            model.addAttribute("servicio", reserva.getServicio());
-            model.addAttribute("cliente", reserva.getCliente());
-            model.addAttribute("tecnico", reserva.getTecnico());
+
+        model.addAttribute("reserva", reserva);
+        model.addAttribute("servicio", reserva.getServicio());
+        model.addAttribute("cliente", reserva.getCliente());
+        model.addAttribute("tecnico", reserva.getTecnico());
 
         try {
             // Definir el formato esperado

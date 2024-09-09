@@ -47,7 +47,7 @@ public class PrincipalControllers {
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
         if (error != null) {
-            model.addAttribute("error", "Credenciales incorrectas");
+            model.addAttribute("error", error);
         }
         return "login"; // Nombre de la plantilla Thymeleaf
     }
