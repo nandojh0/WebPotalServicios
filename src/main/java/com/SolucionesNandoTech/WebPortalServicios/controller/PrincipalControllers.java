@@ -47,6 +47,12 @@ public class PrincipalControllers {
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error, Model model) {
         if (error != null) {
+            if(error.equals("true")){
+                error = "Credenciales incorectas vuelva a intentar";
+            }
+            if(error.equals("expiredUrl")){
+                error = "Session finalizada por inantividad";
+            }
             model.addAttribute("error", error);
         }
         return "login"; // Nombre de la plantilla Thymeleaf
@@ -73,6 +79,10 @@ public class PrincipalControllers {
     public ResponseEntity<?> createUser(@RequestBody UsuarioDto usuarioDto) {
         Response response;
         try {
+            // Lógica para verificar si el usuario ya existe
+        if (usuarioService.isEmailTaken(usuarioDto.getEmail())) {response = new Response<>("020", "El usuario ya existe");
+            return ResponseEntity.badRequest().body(response);
+        }
             usuarioService.registerNewUser(usuarioDto);
             response = new Response("000", "Succes");
             return ResponseEntity.ok().body(response);

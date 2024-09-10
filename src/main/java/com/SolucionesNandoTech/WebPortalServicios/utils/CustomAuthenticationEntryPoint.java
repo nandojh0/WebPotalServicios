@@ -5,7 +5,6 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.utils;
 
-
 import com.SolucionesNandoTech.WebPortalServicios.exceptions.CustomAccessDeniedException;
 import com.SolucionesNandoTech.WebPortalServicios.exceptions.CustomAuthenticationException;
 import com.SolucionesNandoTech.WebPortalServicios.model.Response;
@@ -19,9 +18,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-
-
 
 /**
  *
@@ -38,9 +34,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             System.out.println("Authenticated user roles: " + auth.getAuthorities());
         }
         res.setContentType("application/json;charset=UTF-8");
-       
-        Response<String> response;
 
+        Response<String> response;
         if (authException instanceof CustomAuthenticationException) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
             response = new Response<>("011", "Custom Authentication Error: " + authException.getMessage());
@@ -51,9 +46,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
             response = new Response<>("013", "Unauthorized");
         }
-
+        
         // Convertir la respuesta a JSON y enviarla al cliente
         String jsonResponse = objectMapper.writeValueAsString(response);
         res.getWriter().write(jsonResponse);
+
     }
 }

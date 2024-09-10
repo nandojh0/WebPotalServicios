@@ -14,7 +14,6 @@ import com.SolucionesNandoTech.WebPortalServicios.repository.EspecialidadReposit
 import com.SolucionesNandoTech.WebPortalServicios.repository.RoleRepository;
 import com.SolucionesNandoTech.WebPortalServicios.repository.UsuarioRepository;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  *
@@ -49,8 +46,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario registerNewUser(UsuarioDto usuarioDto) {
-        // Verificar si el usuario ya existe
-        if (!isEmailTaken(usuarioDto.getEmail())) {
+
             // Mapeo de roles desde el DTO a la base de datos
         Set<Role> roles = usuarioDto.getRoles().stream()
                 .map(roleName -> {
@@ -88,10 +84,6 @@ public class UsuarioServiceImpl implements UsuarioService {
             }
 
             return usuarioRepository.save(usuario);
-        } else {
-            throw new RuntimeException("User already exists");
-        }
-
     }
 
     @Override

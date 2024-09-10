@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const especialidadesSelect = document.getElementById('especialidades');
     const listaEspecialidades = document.getElementById('lista-especialidades');
     const agregarEspecialidadBtn = document.getElementById('agregar-especialidad');
-
+     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordMatchMessage = document.getElementById('password-match-message');
+    const buscadorEspecialidades = document.getElementById('buscador-especialidades');
+    const listaEspecialidadesSelect = document.getElementById('especialidades');
     tipoUsuarioSelect.addEventListener('change', function () {
         if (this.value === 'tecnico') {
             camposTecnicoDiv.classList.remove('oculto');
@@ -38,16 +42,57 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    // Filtrado de especialidades mediante el buscador
+    buscadorEspecialidades.addEventListener('input', function() {
+        const filter = buscadorEspecialidades.value.toLowerCase();
+        const options = listaEspecialidadesSelect.getElementsByTagName('option');
 
+        for (let i = 0; i < options.length; i++) {
+            const especialidad = options[i].textContent || options[i].innerText;
+            if (especialidad.toLowerCase().indexOf(filter) > -1) {
+                options[i].style.display = '';
+            } else {
+                options[i].style.display = 'none';
+            }
+        }
+    });
+    
+    // Verificación en tiempo real de las contraseñas
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (confirmPassword !== '' && password !== confirmPassword) {
+            passwordMatchMessage.style.display = 'block';
+        } else {
+            passwordMatchMessage.style.display = 'none';
+        }
+    }
+
+    passwordInput.addEventListener('input', checkPasswordMatch);
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+    // Al enviar el formulario
     document.getElementById('registro-form').addEventListener('submit', function (event) {
         event.preventDefault(); // Previene el envío por defecto del formulario
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
 
+        // Evitar el envío si las contraseñas no coinciden
+        if (password !== confirmPassword) {
+           Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden. Por favor, verifica.'
+            });
+            return;
+        }
+        
         // Obtén los valores del formulario
         const nombre = document.getElementById('nombre').value;
         const email = document.getElementById('email').value;
         const telefono = document.getElementById('telefono').value;
         const direccion = document.getElementById('direccion').value;
-        const password = document.getElementById('password').value;
         const tipoUsuario = document.getElementById('tipo-usuario').value;
         // Obtén las especialidades seleccionadas si el tipo de usuario es 'tecnico'
         let especialidades = [];
@@ -94,10 +139,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     try {
                         const data = JSON.parse(text); // Intenta analizar el texto como JSON
                         if (data.code == '000') {
-                            alert('Registro exitoso');
+                           Swal.fire({
+                            icon: 'success',
+                            title: 'Registro exitoso',
+                            text: 'Registro exitoso. Redirigiendo al login...',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
                             window.location.href = '/WebPortalServicios/login';
+                        });
+                        } else if (data.code === '020') {
+                             Swal.fire({
+                            icon: 'warning',
+                            title: 'Advertencia',
+                            text: 'El usuario ya esta registrado'
+                        });
                         } else {
-                            alert('Error al registrar usuario: ' + data.data);
+                            Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al registrar usuario: ' + data.data
+                        });
                         }
                     } catch (e) {
                         console.error('Error parsing JSON:', e);

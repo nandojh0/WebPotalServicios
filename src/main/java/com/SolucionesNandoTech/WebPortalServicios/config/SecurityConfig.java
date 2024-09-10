@@ -5,9 +5,9 @@
  */
 package com.SolucionesNandoTech.WebPortalServicios.config;
 
+
 import com.SolucionesNandoTech.WebPortalServicios.utils.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -37,7 +37,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -63,14 +63,14 @@ public class SecurityConfig {
                 .failureUrl("/login?error=true")
                 )
                 .exceptionHandling(exceptions -> exceptions
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // Usa el CustomAuthenticationEntryPoint
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                             .invalidSessionStrategy(new SimpleRedirectInvalidSessionStrategy("/login"))
                             .sessionFixation().newSession() // Opción para crear una nueva sesión en caso de fijación de sesión
                             .maximumSessions(1) // Máximo número de sesiones por usuario
-                            .expiredUrl("/login?expired");
+                            .expiredUrl("/login?error=expiredUrl");
                 })
                 .logout(logout -> logout
                 .logoutUrl("/logout")
@@ -81,9 +81,13 @@ public class SecurityConfig {
                 .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 .contentSecurityPolicy(csp -> csp
-                .policyDirectives("default-src 'self'; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com; script-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdn.jsdelivr.net;"))
+                .policyDirectives("default-src 'self'; " +
+                                      "style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com https://cdn.jsdelivr.net; " +
+                                      "script-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdn.jsdelivr.net; " +
+                                      "img-src 'self' data:;")
+                )
                 );
-   
+
         return http.build();
     }
 

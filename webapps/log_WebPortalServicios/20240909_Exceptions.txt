@@ -1,0 +1,11 @@
+0  Hora : 15:33:21  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 15:48:19  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 15:52:05  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 15:56:41  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:06:08  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:07:36  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:07:36  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:07:58  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:13:49  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:18:44  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists
+0  Hora : 16:48:21  IP :  0:0:0:0:0:0:0:1   /register Excepction:java.lang.RuntimeException: User already exists

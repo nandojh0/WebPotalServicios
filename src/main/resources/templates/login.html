@@ -5,8 +5,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Iniciar Sesión</title>
         <link rel="stylesheet" href="./css/login.css">
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+        <!-- Enlace a Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
+        <!-- Encabezado -->
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" th:href="@{/}">Inicio</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/registrar}">Registrar</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
         <!-- Display the error message if it exists -->
         <div th:if="${error}" class="error-message">
             <p th:text="${error}"></p>
@@ -24,7 +48,9 @@
             <input type="password" id="password" name="password" required><br><br>
 
             <input type="submit" value="Login">
+            <a class="nav-link" th:href="@{/registrar}">Registrar</a>
         </form>
+
 
         <!--<script src="./js/login.js"></script>-->
     </body>
