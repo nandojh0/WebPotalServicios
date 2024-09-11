@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,8 +49,7 @@ public class UsuarioReservaController {
     public String crearReserva(Authentication authentication, @RequestParam("servicioId") Long servicioId, @RequestParam("tecnicoId") Long tecnicoId, RedirectAttributes redirectAttributes) {
 
         // Verificar que el principal es una instancia de UsuarioDetails
-        if (authentication.getPrincipal() instanceof Usuario) {
-            Usuario cliente = (Usuario) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Usuario cliente) {
             Servicio servicio = servicioService.obtenerServicio(servicioId);
             Usuario tecnico = usuarioService.obtenerUsuarioPorId(tecnicoId);
 
@@ -75,8 +75,7 @@ public class UsuarioReservaController {
     @GetMapping("/lista")
     public String listarReservas(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
         // Verificar que el principal es una instancia de UsuarioDetails
-        if (authentication.getPrincipal() instanceof Usuario) {
-            Usuario cliente = (Usuario) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Usuario cliente) {
             List<Reserva> reservas = reservaService.findAllReservasById(cliente.getId());
             model.addAttribute("reservas", reservas);
             return "user/ReservasList"; // pagina de reservas
@@ -148,6 +147,12 @@ public class UsuarioReservaController {
         reservaService.saveReserva(reserva);
         servicioService.guardarServicio(servicio);
         return "user/reserva-detalle";
+    }
+    
+    @GetMapping("/eliminar/{id}")
+    public String eliminarReserva(@PathVariable Long id) {
+        reservaService.deleteReserva(id);
+        return "redirect:/user/home";
     }
 
 }

@@ -6,14 +6,15 @@ package com.SolucionesNandoTech.WebPortalServicios.controller;
 
 import com.SolucionesNandoTech.WebPortalServicios.model.ERole;
 import com.SolucionesNandoTech.WebPortalServicios.model.Especialidad;
+import com.SolucionesNandoTech.WebPortalServicios.model.Response;
 import com.SolucionesNandoTech.WebPortalServicios.model.Servicio;
 import com.SolucionesNandoTech.WebPortalServicios.model.Usuario;
-import com.SolucionesNandoTech.WebPortalServicios.service.ReservaService;
 import com.SolucionesNandoTech.WebPortalServicios.service.ServicioService;
 import com.SolucionesNandoTech.WebPortalServicios.service.UsuarioService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,9 +39,6 @@ public class UsuarioServicioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private ReservaService reservaService;
-
     public UsuarioServicioController(ServicioService servicioService) {
         this.servicioService = servicioService;
     }
@@ -54,30 +52,23 @@ public class UsuarioServicioController {
         return "servicios/lista";
     }
 
-//    @PostMapping("/editar")
-//    public String mostrarFormularioDeEditarServicio(@RequestBody ServicioDto servicioDto, Model model) {
-//        Servicio servicio = servicioService.obtenerServicio(servicioDto.getId());
-//        model.addAttribute("servicio", servicio);
-//        return "/user/ServiceForm";
-//    }
     @PostMapping("/editar")
     public String mostrarFormularioDeEditarServicio(@RequestParam("id") Long id, Model model) {
         Servicio servicio = servicioService.obtenerServicio(id);
         model.addAttribute("servicio", servicio);
-        return "/user/ServiceForm";
+        return "user/ServiceForm";
     }
 
     @GetMapping("/crear")
     public String mostrarFormularioCrearServicio(Model model) {
         model.addAttribute("servicio", new Servicio());
-        return "/user/ServiceForm";
+        return "user/ServiceForm";
     }
 
     @PostMapping("/guardar")
     public String crearServicio(@ModelAttribute Servicio servicio, Authentication authentication, RedirectAttributes redirectAttributes) {
 // Verificar que el principal es una instancia de UsuarioDetails
-        if (authentication.getPrincipal() instanceof Usuario) {
-            Usuario creador = (Usuario) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Usuario creador) {
         servicio.setCreador(creador);
         servicioService.guardarServicio(servicio);
         return "redirect:/user/home";
@@ -88,9 +79,10 @@ public class UsuarioServicioController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarServicio(@PathVariable Long id) {
+    public ResponseEntity<Response<String>> eliminarServicio(@PathVariable Long id) {
         servicioService.eliminarServicio(id);
-        return "redirect:/user/home";
+        Response<String> response = new Response<>("success", "Servicio eliminado con éxito", "home");
+        return ResponseEntity.ok(response);
     }
 
     //con js

@@ -33,7 +33,6 @@ public class UsuarioController {
     public String userHome(Authentication authentication,Model model, RedirectAttributes redirectAttributes) {
         // Obtener el Authentication del SecurityContextHolder
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         // Verificar que el principal es una instancia de UsuarioDetails
         if (authentication.getPrincipal() instanceof Usuario usuarioDetails) {
 
@@ -44,9 +43,7 @@ public class UsuarioController {
                     .orElse("USER_NOT_DEFINED");
             
 
-        model.addAttribute("username",usuarioDetails.getNombre());
-        model.addAttribute("id",usuarioDetails.getId());
-        model.addAttribute("phoneNumber",usuarioDetails.getTelefono());
+        model.addAttribute("cliente",usuarioDetails);
         model.addAttribute("authorities", role);
         List<Servicio> servicios = servicioService.obtenerServiciosPorCreador(usuarioDetails.getId());
         model.addAttribute("servicios", servicios);

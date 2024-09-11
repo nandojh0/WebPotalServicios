@@ -20,28 +20,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/tech")
 public class TecnicoController {
-    
+
     @GetMapping("/home")
-    public String userHome(Authentication authentication,Model model, RedirectAttributes redirectAttributes) {
+    public String userHome(Authentication authentication, Model model, RedirectAttributes redirectAttributes) {
         // Obtener el Authentication del SecurityContextHolder
         // Verificar que el principal es una instancia de UsuarioDetails
-        if (authentication.getPrincipal() instanceof Usuario) {
-            Usuario usuarioDetails = (Usuario) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Usuario usuarioDetails) {
 
             // Obtener el  roles del UsuarioDetails
             String role = usuarioDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
                     .orElse("USER_NOT_DEFINED");
-            
 
-        model.addAttribute("username",usuarioDetails.getNombre());
-        model.addAttribute("id",usuarioDetails.getId());
-        model.addAttribute("phoneNumber",usuarioDetails.getTelefono());
-        model.addAttribute("authorities", role);
-         } else {
-          redirectAttributes.addFlashAttribute("No autenticado");
-          return "redirect:/login";
+            model.addAttribute("tecnico", usuarioDetails);
+            model.addAttribute("authorities", role);
+        } else {
+            redirectAttributes.addFlashAttribute("No autenticado");
+            return "redirect:/login";
         }
         return "tech/home"; // Página de inicio del usuario
     }
