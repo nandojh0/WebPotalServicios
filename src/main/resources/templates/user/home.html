@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Información del Usuario</title>
+        <title>InformaciÃ³n del Usuario</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--        <link rel="stylesheet" href="./css/styles.css">-->
@@ -18,17 +18,17 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <!-- Enlace a la pÃƒÆ’Ã‚Â¡gina de inicio -->
+                <!-- Enlace a la pÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡gina de inicio -->
                 <a class="navbar-brand" th:href="@{/user/home}">Mi App</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <!-- Contenedor de los enlaces de navegaciÃƒÆ’Ã‚Â³n -->
+                    <!-- Contenedor de los enlaces de navegaciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n -->
                     <ul class="navbar-nav ms-auto"> <!-- ms-auto asegura que el contenido se alinee a la derecha -->
-                        <!-- Enlace de cerrar sesiÃƒÆ’Ã‚Â³n que solo se muestra si el usuario estÃƒÆ’Ã‚Â¡ autenticado -->
+                        <!-- Enlace de cerrar sesiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n que solo se muestra si el usuario estÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ autenticado -->
                         <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link" th:href="@{/logout}">Cerrar sesiÃ³n</a>
+                            <a class="nav-link" th:href="@{/logout}">Cerrar sesión</a>
                         </li>
                     </ul>
                 </div>
